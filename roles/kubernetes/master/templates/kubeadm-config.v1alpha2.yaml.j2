@@ -1,10 +1,11 @@
 apiVersion: kubeadm.k8s.io/v1alpha2
 kind: MasterConfiguration
 api:
-  advertiseAddress: {{ ip | default(ansible_default_ipv4.address) }}
-  bindPort: {{ kube_apiserver_port }}
 {% if groups['kube-master'] | length > 1 and kubeadm_config_api_fqdn is defined %}
   controlPlaneEndpoint: {{ kubeadm_config_api_fqdn }}:{{ loadbalancer_apiserver.port }}
+{% else %}
+  advertiseAddress: {{ ip | default(ansible_default_ipv4.address) }}
+  bindPort: {{ kube_apiserver_port }}
 {% endif %}
 etcd:
   external:
@@ -27,6 +28,9 @@ kubeProxy:
   config:
     mode: {{ kube_proxy_mode }}
     hostnameOverride: {{ inventory_hostname }}
+{% if kube_proxy_nodeport_addresses %}
+    nodePortAddresses: [{{ kube_proxy_nodeport_addresses_cidr }}]
+{% endif %}
 authorizationModes:
 {% for mode in authorization_modes %}
 - {{ mode }}
@@ -79,11 +83,14 @@ apiServerExtraArgs:
 {% endif %}
   allow-privileged: "true"
 {% if kubernetes_audit %}
-  audit-log-path: {{ audit_log_path }}
+  audit-log-path: "{{ audit_log_path }}"
   audit-log-maxage: "{{ audit_log_maxage }}"
   audit-log-maxbackup: "{{ audit_log_maxbackups }}"
   audit-log-maxsize: "{{ audit_log_maxsize }}"
   audit-policy-file: {{ audit_policy_file }}
+{% endif %}
+{% if kube_feature_gates %}
+  feature-gates: {{ kube_feature_gates|join(',') }}
 {% endif %}
 {% for key in kube_kubeadm_apiserver_extra_args %}
   {{ key }}: "{{ kube_kubeadm_apiserver_extra_args[key] }}"
@@ -110,9 +117,6 @@ apiServerExtraVolumes:
   writable: true
 {% endif %}
 {% endif %}
-{% if kube_feature_gates %}
-  feature-gates: {{ kube_feature_gates|join(',') }}
-{% endif %}
 {% for key in kube_kubeadm_controller_extra_args %}
   {{ key }}: "{{ kube_kubeadm_controller_extra_args[key] }}"
 {% endfor %}
@@ -135,3 +139,6 @@ nodeRegistration:
   taints:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
+{% if container_manager == 'crio' %}
+  criSocket: /var/run/crio/crio.sock
+{% endif %}

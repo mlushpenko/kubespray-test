@@ -14,12 +14,6 @@ bin_dir: /usr/local/bin
 ## but don't know about that address themselves.
 #access_ip: 1.1.1.1
 
-### LOADBALANCING AND ACCESS MODES
-## Enable multiaccess to configure etcd clients to access all of the etcd members directly
-## as the "http://hostX:port, http://hostY:port, ..." and ignore the proxy loadbalancers.
-## This may be the case if clients support and loadbalance multiple etcd servers natively.
-#etcd_multiaccess: true
-
 ### ETCD: disable peer client cert authentication.
 # This affects ETCD_PEER_CLIENT_CERT_AUTH variable
 #etcd_peer_client_auth: true
@@ -145,8 +139,17 @@ bin_dir: /usr/local/bin
 ## Set this if your etcd nodes have less than 4GB but you want more RAM for etcd. Set to 0 for unrestricted RAM.
 #etcd_memory_limit: "512M"
 
+## Etcd has a default of 2G for its space quota. If you put a value in etcd_memory_limit which is less than
+## etcd_quota_backend_bytes, you may encounter out of memory terminations of the etcd cluster. Please check
+## etcd documentation for more information.
+#etcd_quota_backend_bytes: "2G"
+
 # The read-only port for the Kubelet to serve on with no authentication/authorization. Uncomment to enable.
 #kube_read_only_port: 10255
 
 # Does coreos need auto upgrade, default is true
 #coreos_auto_upgrade: true
+
+# Set true to download and cache container
+#download_container: true
+

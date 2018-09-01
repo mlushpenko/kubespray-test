@@ -22,7 +22,7 @@ To deploy the cluster you can use :
     sudo pip install -r requirements.txt
 
     # Copy ``inventory/sample`` as ``inventory/mycluster``
-    cp -rfp inventory/sample inventory/mycluster
+    cp -rfp inventory/sample/* inventory/mycluster
 
     # Update Ansible inventory file with inventory builder
     declare -a IPS=(10.10.1.3 10.10.1.4 10.10.1.5)
@@ -79,7 +79,7 @@ Supported Linux Distributions
 
 -   **Container Linux by CoreOS**
 -   **Debian** Jessie, Stretch, Wheezy
--   **Ubuntu** 16.04
+-   **Ubuntu** 16.04, 18.04
 -   **CentOS/RHEL** 7
 -   **Fedora/CentOS** Atomic
 -   **openSUSE** Leap 42.3/Tumbleweed
