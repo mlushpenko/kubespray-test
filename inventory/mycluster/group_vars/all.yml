@@ -1,5 +1,5 @@
 # Valid bootstrap options (required): ubuntu, coreos, centos, none
-bootstrap_os: centos
+bootstrap_os: ubuntu
 
 #Directory where etcd data stored
 etcd_data_dir: /var/lib/etcd
@@ -25,7 +25,7 @@ bin_dir: /usr/local/bin
 #etcd_peer_client_auth: true
 
 ## External LB example config
-apiserver_loadbalancer_domain_name: "internal-elb-k8s-1332421559.eu-west-1.elb.amazonaws.com"
+apiserver_loadbalancer_domain_name: "internal-elb-k8s-680404152.eu-west-1.elb.amazonaws.com"
 loadbalancer_apiserver:
 #  address: 1.2.3.4
   port: 443
@@ -63,7 +63,7 @@ loadbalancer_apiserver_localhost: false
 ## If set the possible values are either 'gce', 'aws', 'azure', 'openstack', 'vsphere', or 'external'
 ## When openstack is used make sure to source in the openstack credentials
 ## like you would do when using nova-client before starting the playbook.
-#cloud_provider:
+cloud_provider: aws
 
 ## When azure is used, you need to also set the following variables.
 ## see docs/azure.md for details on how to get these values
@@ -98,8 +98,8 @@ loadbalancer_apiserver_localhost: false
 ## Uncomment to enable experimental kubeadm deployment mode
 kubeadm_enabled: true
 ## Set these proxy values in order to update package manager and docker daemon to use proxies
-http_proxy: "http://30.0.20.112:8888/"
-https_proxy: "http://30.0.20.112:8888/"
+http_proxy: "http://10.0.27.220:8888/"
+https_proxy: "http://10.0.27.220:8888/"
 ## Refer to roles/kubespray-defaults/defaults/main.yml before modifying no_proxy
 #no_proxy: ""
 

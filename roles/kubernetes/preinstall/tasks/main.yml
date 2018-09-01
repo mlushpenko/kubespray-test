@@ -220,13 +220,6 @@
   tags:
     - bootstrap-os
 
-- name: RedHat/CentOS - Install pip
-  command: bash -c "curl https://bootstrap.pypa.io/get-pip.py | python -"
-  sudo: yes
-
-- name: Install httplib2
-  pip: name=httplib2
-
 # Todo : selinux configuration
 - name: Confirm selinux deployed
   stat:
