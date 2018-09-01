@@ -14,12 +14,6 @@ bin_dir: /usr/local/bin
 ## but don't know about that address themselves.
 #access_ip: 1.1.1.1
 
-### LOADBALANCING AND ACCESS MODES
-## Enable multiaccess to configure etcd clients to access all of the etcd members directly
-## as the "http://hostX:port, http://hostY:port, ..." and ignore the proxy loadbalancers.
-## This may be the case if clients support and loadbalance multiple etcd servers natively.
-#etcd_multiaccess: true
-
 ### ETCD: disable peer client cert authentication.
 # This affects ETCD_PEER_CLIENT_CERT_AUTH variable
 #etcd_peer_client_auth: true
@@ -63,7 +57,7 @@ loadbalancer_apiserver_localhost: false
 ## If set the possible values are either 'gce', 'aws', 'azure', 'openstack', 'vsphere', or 'external'
 ## When openstack is used make sure to source in the openstack credentials
 ## like you would do when using nova-client before starting the playbook.
-cloud_provider: aws
+#cloud_provider: aws
 
 ## When azure is used, you need to also set the following variables.
 ## see docs/azure.md for details on how to get these values
@@ -94,6 +88,22 @@ cloud_provider: aws
 #openstack_lbaas_monitor_delay: "1m"
 #openstack_lbaas_monitor_timeout: "30s"
 #openstack_lbaas_monitor_max_retries: "3"
+
+## When Oracle Cloud Infrastructure is used, set these variables
+#oci_private_key:
+#oci_region_id:
+#oci_tenancy_id:
+#oci_user_id:
+#oci_user_fingerprint:
+#oci_compartment_id:
+#oci_vnc_id:
+#oci_subnet1_id:
+#oci_subnet2_id:
+## Overide these default behaviors if you wish
+#oci_security_list_management: All
+# If oci_use_instance_principals is true, you do not need to set the region, tenancy, user, key, passphrase, or fingerprint
+#oci_use_instance_principals: false
+#oci_cloud_controller_version: 0.5.0
 
 ## Uncomment to enable experimental kubeadm deployment mode
 kubeadm_enabled: true
@@ -129,8 +139,17 @@ https_proxy: "http://10.0.27.220:8888/"
 ## Set this if your etcd nodes have less than 4GB but you want more RAM for etcd. Set to 0 for unrestricted RAM.
 #etcd_memory_limit: "512M"
 
+## Etcd has a default of 2G for its space quota. If you put a value in etcd_memory_limit which is less than
+## etcd_quota_backend_bytes, you may encounter out of memory terminations of the etcd cluster. Please check
+## etcd documentation for more information.
+#etcd_quota_backend_bytes: "2G"
+
 # The read-only port for the Kubelet to serve on with no authentication/authorization. Uncomment to enable.
 kube_read_only_port: 10255
 
 # Does coreos need auto upgrade, default is true
 #coreos_auto_upgrade: true
+
+# Set true to download and cache container
+#download_container: true
+
